@@ -1,0 +1,19 @@
+<div class="main">
+  <div class="search">
+    <input
+      (keyup)="search(query.value)"
+      #query
+      autofocus
+      maxlength="50"
+      name="query"
+      placeholder="Введите запрос..."
+      type="text"
+    />
+  </div>
+  <div class="news-list">
+    <div class="news" *ngFor="let newsItem of newsListObservable | async">
+      <a [href]='newsItem.link' target="_blank">{{newsItem.title}}</a>
+    </div>
+  </div>
+  <div *ngIf='(newsListObservable | async)?.length === 0'>Ничего не найдено.</div>
+</div>

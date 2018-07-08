@@ -1,0 +1,40 @@
+* {
+  font-family: 'Helvetica';
+}
+
+div.main {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0 55px;
+}
+
+div.search {
+  display: flex;
+  align-items: center;
+  height: 80px;
+}
+
+div.search > input {
+  width: 600px;
+  padding: 5px 15px;
+  border-radius: 3px;
+  outline: none;
+  font-size: 20px;
+}
+
+.news-list {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.news {
+  margin: 5px 10px;
+  width: 600px;
+}
+
+.news a, .news a:visited, .news a:hover {
+  text-decoration: none;
+  color: darkblue;
+}
