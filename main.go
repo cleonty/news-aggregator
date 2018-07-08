@@ -197,7 +197,7 @@ func (app *NewsApp) Start() error {
 	app.startUpdaters()
 	mux := http.NewServeMux()
 	mux.HandleFunc("/news/", app.searchHandler)
-	mux.Handle("/", http.FileServer(http.Dir("./client/dist/client")))
+	mux.Handle("/", http.FileServer(http.Dir("./public")))
 	if err := http.ListenAndServe(":8080", mux); err != nil {
 		return err
 	}
