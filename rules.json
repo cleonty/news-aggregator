@@ -1,7 +1,7 @@
 [
   {
     "url": "https://66.ru",
-	  "intervalMinutes": 30,
+    "intervalMinutes": 30,
     "newsNodesExpr": "//div[@class=\"new-news-grid__elem__list-item\"]",
     "linkRule": {
       "expr": "a",
@@ -13,7 +13,7 @@
   },
   {
     "url": "http://www.e1.ru",
-	  "intervalMinutes": 40,
+    "intervalMinutes": 40,
     "newsNodesExpr": "//div[@class=\"e1-article-section__content\" and @data-vr-zone=\"Главная - новости\"]/article",
     "linkRule": {
       "expr": "a",
