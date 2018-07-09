@@ -8,6 +8,9 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"os/exec"
+	"runtime"
+	"strconv"
 	"time"
 
 	"github.com/antchfx/htmlquery"
@@ -41,6 +44,7 @@ type NewsApp struct {
 	db           *sql.DB
 	server       *http.Server
 	parsingRules []*ParsingRule
+	port         uint
 }
 
 func (app *NewsApp) readParsingRules() error {
@@ -181,11 +185,20 @@ func (app *NewsApp) insertNewsItem(item *NewsItem) error {
 	return nil
 }
 
+func (app *NewsApp) runBrowser() {
+	url := "http://localhost:" + strconv.FormatUint(uint64(app.port), 10)
+	if runtime.GOOS == "windows" {
+		if err := exec.Command("cmd", "/c", "start", url).Start(); err != nil {
+			log.Printf("Unable to run browser: %v\n", err)
+		}
+	}
+}
+
 func NewNewsApp() *NewsApp {
 	return &NewsApp{}
 }
 
-func (app *NewsApp) Start() error {
+func (app *NewsApp) Start(port uint) error {
 	if err := app.readParsingRules(); err != nil {
 		return err
 	}
@@ -194,11 +207,14 @@ func (app *NewsApp) Start() error {
 	if err := app.openDatabase(); err != nil {
 		return err
 	}
+	app.port = port
 	app.startUpdaters()
 	mux := http.NewServeMux()
 	mux.HandleFunc("/news/", app.searchHandler)
 	mux.Handle("/", http.FileServer(http.Dir("./public")))
-	if err := http.ListenAndServe(":8080", mux); err != nil {
+	time.AfterFunc(2*time.Second, app.runBrowser)
+	address := ":" + strconv.FormatUint(uint64(port), 10)
+	if err := http.ListenAndServe(address, mux); err != nil {
 		return err
 	}
 	return nil
@@ -238,7 +254,7 @@ func convertToAbsURL(baseURL string, linkURL string) (string, error) {
 
 func main() {
 	app := NewNewsApp()
-	if err := app.Start(); err != nil {
+	if err := app.Start(8383); err != nil {
 		log.Fatal(err)
 	}
 }
